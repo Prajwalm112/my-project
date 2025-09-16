@@ -1,0 +1,56 @@
+/* Results.css */
+.results-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.results-actions button {
+  margin-left: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #150202;
+  background: #140600;
+  cursor: pointer;
+}
+
+.results-table-wrap {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  overflow-x: auto;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.results-table th {
+  background: #f7f7f7;
+  position: sticky;
+  top: 0;
+}
+
+.snippet {
+  max-width: 420px;
+}
+.results-header {
+  margin-top: 80px;  /* push content below header */
+  padding: 20px;
+}

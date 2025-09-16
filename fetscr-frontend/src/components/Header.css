@@ -1,0 +1,142 @@
+/* .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #ffffff;
+  border-bottom: 2px solid #eee;
+  font-family: Arial, sans-serif;
+} */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;         /* smaller padding */
+  background: #ffffff;
+  border-bottom: 2px solid #eee;
+  font-family: Arial, sans-serif;
+  width: 100vw;               /* full viewport width */
+  position: fixed;            /* stick to top */
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: 0;                  /* remove gaps */
+  box-sizing: border-box;
+  z-index: 1000;              /* stay above content */
+}
+
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+.header-center {
+  display: flex;
+  gap: 30px;
+}
+
+.header-center a {
+  text-decoration: none;
+  color: #555;
+  font-size: 16px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.header-center a:hover {
+  color: #007bff;
+}
+
+.header-right {
+  display: flex;
+  gap: 15px;
+}
+
+.btn-outline {
+  padding: 8px 16px;
+  border: 1px solid #007bff;
+  background: transparent;
+  color: #007bff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-outline:hover {
+  background: #007bff;
+  color: #fff;
+}
+
+.btn-primary {
+  padding: 8px 16px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-primary:hover {
+  background: #0056b3;
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 220px;
+  min-height: 100vh;
+  border-right: 1px solid #eee;
+  border-bottom: none;
+  padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #fff;
+}
+
+.sidebar-header .logo {
+  margin-bottom: 20px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 0;
+  align-items: flex-start;
+}
+
+.sidebar-nav a {
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+  padding: 6px 0;
+  transition: color 0.3s;
+}
+
+.sidebar-nav a:hover {
+  color: #eff1f4;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #007bff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profile-avatar:hover {
+  background: #0056b3;
+}

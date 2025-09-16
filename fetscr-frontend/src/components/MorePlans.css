@@ -1,0 +1,49 @@
+.subscription-container {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.plans {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap; /* Ensures responsive stacking on smaller screens */
+  margin-top: 20px;
+}
+
+.plan {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 20px;
+  width: 280px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+.plan:hover {
+  transform: translateY(-5px);
+}
+
+.price {
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.back-btn {
+  margin-top: 2rem;
+  background: #6c757d;
+  color: #fff;
+}
