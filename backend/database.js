@@ -1,13 +1,14 @@
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
 
-// Open SQLite database
 export async function openDB() {
+  const dbFile = process.env.DB_FILE || './fetscr.db';
   return open({
-    filename: "./fetscr.db",
+    filename: dbFile,
     driver: sqlite3.Database,
   });
 }
+
 
 // Initialize tables
 export async function initDB() {
