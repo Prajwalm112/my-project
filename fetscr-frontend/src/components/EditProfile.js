@@ -1,4 +1,3 @@
-// src/components/EditProfile.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./EditProfile.css";
@@ -6,6 +5,7 @@ import "./EditProfile.css";
 export default function EditProfile() {
   const navigate = useNavigate();
 
+  // Get user from localStorage safely
   let storedUser = {};
   try {
     storedUser = JSON.parse(localStorage.getItem("fetscr_user")) || {};
@@ -22,6 +22,7 @@ export default function EditProfile() {
 
   const [message, setMessage] = useState("");
 
+  // Redirect to login if not logged in
   useEffect(() => {
     if (!token) {
       navigate("/login");
@@ -49,10 +50,12 @@ export default function EditProfile() {
 
     if (!validateForm()) return;
 
-    // Update localStorage (replace this with API call if backend ready)
+    // Update localStorage (replace with API call if backend is ready)
     localStorage.setItem("fetscr_user", JSON.stringify(formData));
     setMessage("✅ Profile updated successfully!");
-    setTimeout(() => navigate("/home"), 1200);
+
+    // Redirect to profile/home after 1.2s
+    setTimeout(() => navigate("/profile"), 1200);
   };
 
   return (
@@ -86,7 +89,16 @@ export default function EditProfile() {
           />
         </label>
 
-        <button type="submit">Save Changes</button>
+        <div className="edit-profile-actions">
+          <button type="submit">Save Changes</button>
+          <button
+            type="button"
+            onClick={() => navigate("/profile")}
+            className="cancel-btn"
+          >
+            Cancel
+          </button>
+        </div>
       </form>
     </div>
   );

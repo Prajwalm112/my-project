@@ -1,9 +1,7 @@
-// src/components/Home.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 
-// Use environment variable instead of hardcoding localhost
 const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Home() {
@@ -13,7 +11,6 @@ export default function Home() {
   const [planInfo, setPlanInfo] = useState(null);
   const navigate = useNavigate();
 
-  // Load recent queries from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem("fetscr_recent_queries");
     if (stored) {
@@ -80,13 +77,11 @@ export default function Home() {
         throw new Error(data.error || "Scrape failed");
       }
 
-      // Save results in sessionStorage
       sessionStorage.setItem(
         "fetscr_results",
         JSON.stringify({ results: data.results, query: finalQuery })
       );
 
-      // Update recent queries (keep only last 5)
       const newRecent = [
         { query: finalQuery, count: data.results.length, time: new Date().toISOString() },
         ...recentQueries.filter((r) => r.query !== finalQuery),
@@ -95,7 +90,6 @@ export default function Home() {
       setRecentQueries(newRecent);
       localStorage.setItem("fetscr_recent_queries", JSON.stringify(newRecent));
 
-      // update plan info if provided
       if (data.queries_remaining !== undefined && planInfo) {
         setPlanInfo({
           ...planInfo,
@@ -104,7 +98,6 @@ export default function Home() {
         });
       }
 
-      // Navigate to results page
       navigate("/results", { state: { results: data.results, query: finalQuery } });
     } catch (err) {
       console.error(err);
@@ -119,13 +112,12 @@ export default function Home() {
       <h1 className="main-heading">FETSCR</h1>
       <p className="subtitle">Scraping Data Made Simple</p>
 
-      {/* Plan info display */}
       {planInfo ? (
         <div className="plan-info" style={{ marginBottom: 12 }}>
           <strong>Plan:</strong> {planInfo.plan_type} &nbsp;|&nbsp;
           <strong>Remaining queries today:</strong>{" "}
           {planInfo.queries_remaining ??
-            Math.max(0, (planInfo.allowed_queries || 0) - (planInfo.queries_used || 0))}{" "}
+            Math.max(0, (planInfo.allowed_queries || 0) - (planInfo.queries_used || 0))}
           &nbsp;|&nbsp;
           <strong>Results/query:</strong> {planInfo.results_per_query}
           &nbsp;&nbsp;

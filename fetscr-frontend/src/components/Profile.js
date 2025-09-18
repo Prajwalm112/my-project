@@ -1,4 +1,3 @@
-// src/components/Profile.js
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Profile.css";
@@ -34,10 +33,7 @@ export default function Profile() {
   }
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSave = () => {
@@ -45,6 +41,7 @@ export default function Profile() {
     localStorage.setItem("fetscr_user", JSON.stringify(updatedUser));
     setUser(updatedUser);
     setIsEditing(false);
+    alert("Profile updated successfully!");
   };
 
   const handleLogout = () => {
