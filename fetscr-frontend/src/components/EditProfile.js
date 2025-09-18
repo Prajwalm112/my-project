@@ -5,13 +5,22 @@ import "./EditProfile.css";
 
 export default function EditProfile() {
   const navigate = useNavigate();
-  const storedUser = JSON.parse(localStorage.getItem("fetscr_user")) || {};
+
+  let storedUser = {};
+  try {
+    storedUser = JSON.parse(localStorage.getItem("fetscr_user")) || {};
+  } catch (err) {
+    console.error("Invalid user data in localStorage");
+  }
+
   const token = localStorage.getItem("fetscr_token");
 
   const [formData, setFormData] = useState({
     name: storedUser.name || "",
     email: storedUser.email || "",
   });
+
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (!token) {
@@ -23,19 +32,35 @@ export default function EditProfile() {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const validateForm = () => {
+    if (formData.name.trim().length < 2) {
+      setMessage("Name must be at least 2 characters long.");
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setMessage("Please enter a valid email address.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // For now just update localStorage
+    if (!validateForm()) return;
+
+    // Update localStorage (replace this with API call if backend ready)
     localStorage.setItem("fetscr_user", JSON.stringify(formData));
-    alert("Profile updated successfully!");
-    navigate("/home");
+    setMessage("✅ Profile updated successfully!");
+    setTimeout(() => navigate("/home"), 1200);
   };
 
   return (
     <div className="edit-profile-page">
       <form className="edit-profile-form" onSubmit={handleSubmit}>
         <h2>Edit Profile</h2>
+
+        {message && <p className="form-message">{message}</p>}
 
         <label>
           Name

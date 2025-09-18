@@ -15,6 +15,9 @@ const LoginPage = () => {
   const [resetLoading, setResetLoading] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ Backend API URL from .env
+  const API_URL = process.env.REACT_APP_API_URL;
+
   // Login form handlers
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,7 +28,7 @@ const LoginPage = () => {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/login", {
+      const res = await fetch(`${API_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -69,7 +72,7 @@ const LoginPage = () => {
 
     try {
       setResetLoading(true);
-      const res = await fetch("http://localhost:5000/reset-password", {
+      const res = await fetch(`${API_URL}/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, newPassword }),

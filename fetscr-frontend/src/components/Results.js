@@ -18,10 +18,8 @@ export default function Results() {
     if (s?.results) {
       setResults(s.results);
       setQuery(s.query || "");
-      // refresh sessionStorage so it's up-to-date
       sessionStorage.setItem("fetscr_results", JSON.stringify({ results: s.results, query: s.query }));
     } else {
-      // fallback to sessionStorage (so refresh or direct open works)
       const stored = sessionStorage.getItem("fetscr_results");
       if (stored) {
         try {
@@ -59,7 +57,6 @@ export default function Results() {
 
   const downloadPDF = async () => {
     if (!tableRef.current) return;
-    // render the table DOM to canvas
     const canvas = await html2canvas(tableRef.current, { scale: 2 });
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF("p", "pt", "a4");
@@ -96,10 +93,9 @@ export default function Results() {
             <tr>
               <th>#</th>
               <th>Name</th>
-              
               <th>Snippet</th>
               <th>Link</th>
-              
+              <th>Image</th> {/* ✅ Added Image column to match rows */}
             </tr>
           </thead>
           <tbody>
@@ -107,7 +103,6 @@ export default function Results() {
               <tr key={idx}>
                 <td>{idx + 1}</td>
                 <td>{r.name}</td>
-                
                 <td className="snippet">{r.snippet}</td>
                 <td>
                   {r.link ? (

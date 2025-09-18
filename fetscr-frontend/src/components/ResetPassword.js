@@ -10,27 +10,33 @@ const ResetPassword = () => {
 
   const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(""); setSuccess("");
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError("");
+  setSuccess("");
 
-    try {
-      const res = await fetch("http://localhost:5000/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
+  try {
+    const API_URL = process.env.REACT_APP_API_URL;
 
-      if (!data.success) setError(data.error || "Failed to reset password");
-      else {
-        setSuccess("Password reset successfully! You can now login.");
-        setTimeout(() => navigate("/login"), 2000);
-      }
-    } catch (err) {
-      setError("Server error: " + err.message);
+    const res = await fetch(`${API_URL}/reset-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+      setError(data.error || "Failed to reset password");
+    } else {
+      setSuccess("Password reset successfully! You can now login.");
+      setTimeout(() => navigate("/login"), 2000);
     }
-  };
+  } catch (err) {
+    setError("Server error: " + err.message);
+  }
+};
+
 
   return (
     <div className="login-page">

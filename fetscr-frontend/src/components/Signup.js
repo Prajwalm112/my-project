@@ -3,13 +3,16 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import "./Signup.css";
 
+// ✅ use env variable
+const API_URL = process.env.REACT_APP_API_URL;
+
 const SignUpPage = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -17,11 +20,12 @@ const SignUpPage = () => {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/signup", {
+      const res = await fetch(`${API_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
+
       const data = await res.json();
 
       if (!data.success) {
@@ -44,17 +48,35 @@ const SignUpPage = () => {
 
         <label>
           Name
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
         </label>
 
         <label>
           Email
-          <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
         </label>
 
         <label>
           Password
-          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+          />
         </label>
 
         <button type="submit">Sign Up</button>

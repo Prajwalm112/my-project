@@ -18,13 +18,14 @@ export default function Header() {
 
   return (
     <header className={isPricingPage ? "header sidebar-header" : "header"}>
-      <div className="header-left">
+      <div className="header-left" onClick={() => navigate("/home")} style={{ cursor: "pointer" }}>
         <h2 className="logo">FETSCR</h2>
       </div>
 
       <nav className={isPricingPage ? "sidebar-nav" : "header-center"}>
         <Link to="/home">Home</Link>
         <Link to="/pricing">Pricing</Link>
+        {/* change to real routes when implemented */}
         <a href="#community">Community</a>
         <a href="#docs">Docs</a>
       </nav>
@@ -34,6 +35,7 @@ export default function Header() {
           {token && user ? (
             <div
               className="profile-avatar"
+              title="Go to profile"
               onClick={() => navigate("/profile")}
             >
               {getFirstLetter(user.name)}

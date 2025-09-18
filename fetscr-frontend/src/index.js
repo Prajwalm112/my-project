@@ -1,13 +1,17 @@
+// src/index.js
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
-import "./components/plans.css";
-import "./components/Home.css";
-import "./components/Header.css";
+
+// Only import global styles here
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );

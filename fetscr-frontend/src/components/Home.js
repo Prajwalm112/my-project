@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Home.css";
 
-const SERVER = "http://localhost:5000";
+// Use environment variable instead of hardcoding localhost
+const API_URL = process.env.REACT_APP_API_URL;
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -30,7 +31,7 @@ export default function Home() {
     try {
       const token = localStorage.getItem("fetscr_token");
       if (!token) return;
-      const res = await fetch(`${SERVER}/getPlan`, {
+      const res = await fetch(`${API_URL}/getPlan`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -38,7 +39,6 @@ export default function Home() {
       if (res.ok && data.success) {
         setPlanInfo(data.plan);
       } else {
-        // ignore if token expired or error (user may re-login)
         setPlanInfo(null);
       }
     } catch (err) {
@@ -66,18 +66,17 @@ export default function Home() {
         return;
       }
 
-      const res = await fetch(`${SERVER}/scrape`, {
+      const res = await fetch(`${API_URL}/scrape`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // ✅ Attach token
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ query: finalQuery, pages: 3 }),
       });
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        // show specific message if query limit reached
         throw new Error(data.error || "Scrape failed");
       }
 
@@ -96,9 +95,13 @@ export default function Home() {
       setRecentQueries(newRecent);
       localStorage.setItem("fetscr_recent_queries", JSON.stringify(newRecent));
 
-      // update plan info (queries remaining) if provided
+      // update plan info if provided
       if (data.queries_remaining !== undefined && planInfo) {
-        setPlanInfo({ ...planInfo, queries_remaining: data.queries_remaining, queries_used: data.queries_used });
+        setPlanInfo({
+          ...planInfo,
+          queries_remaining: data.queries_remaining,
+          queries_used: data.queries_used,
+        });
       }
 
       // Navigate to results page
@@ -120,7 +123,10 @@ export default function Home() {
       {planInfo ? (
         <div className="plan-info" style={{ marginBottom: 12 }}>
           <strong>Plan:</strong> {planInfo.plan_type} &nbsp;|&nbsp;
-          <strong>Remaining queries today:</strong> {planInfo.queries_remaining ?? Math.max(0, (planInfo.allowed_queries || 0) - (planInfo.queries_used || 0))} &nbsp;|&nbsp;
+          <strong>Remaining queries today:</strong>{" "}
+          {planInfo.queries_remaining ??
+            Math.max(0, (planInfo.allowed_queries || 0) - (planInfo.queries_used || 0))}{" "}
+          &nbsp;|&nbsp;
           <strong>Results/query:</strong> {planInfo.results_per_query}
           &nbsp;&nbsp;
           <button onClick={() => navigate("/pricing")}>Change Plan</button>

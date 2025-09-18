@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./plans.css";
 
-const SERVER = "http://localhost:5000";
+// ✅ Use environment variable
+const API_URL = process.env.REACT_APP_API_URL;
 
 const SubscriptionPlans = () => {
   const [customQueries, setCustomQueries] = useState(1);
@@ -27,9 +28,12 @@ const SubscriptionPlans = () => {
         return null;
       }
 
-      const res = await fetch(`${SERVER}/setPlan`, {
+      const res = await fetch(`${API_URL}/setPlan`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(payload),
       });
       const data = await res.json();
@@ -45,15 +49,15 @@ const SubscriptionPlans = () => {
     }
   }
 
-  // --- Choosing Predefined Plans ---
   async function choosePlan(plan) {
     const data = await callSetPlan({ plan });
     if (!data) return;
-    alert(`✅ Plan activated: ${data.plan.toUpperCase()} (${data.allowed_queries} queries × ${data.results_per_query} results)`);
+    alert(
+      `✅ Plan activated: ${data.plan.toUpperCase()} (${data.allowed_queries} queries × ${data.results_per_query} results)`
+    );
     navigate("/home");
   }
 
-  // --- Choosing Custom Plan ---
   async function chooseCustomPlan() {
     if (!customQueries || !customResults || customResults > 100) {
       alert("⚠ Please enter valid values (Max results = 100).");
@@ -121,7 +125,6 @@ const SubscriptionPlans = () => {
             </p>
             <button onClick={() => choosePlan("sub1")}>Subscribe Sub1</button>
 
-            {/* Click More inside Pro section */}
             <button
               className="click-more-btn"
               onClick={() => navigate("/more-plans")}
@@ -130,9 +133,10 @@ const SubscriptionPlans = () => {
             </button>
           </div>
         </div>
+
         <button className="back-btn" onClick={() => navigate(-1)}>
-        ⬅ Back
-      </button>
+          ⬅ Back
+        </button>
       </div>
     </div>
   );

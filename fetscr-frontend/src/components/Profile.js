@@ -1,24 +1,34 @@
 // src/components/Profile.js
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";   // ⬅ import navigate
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Profile.css";
 
 export default function Profile() {
-  const storedUser = JSON.parse(localStorage.getItem("fetscr_user"));
-  const [user, setUser] = useState(storedUser);
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const navigate = useNavigate();   // ⬅ setup navigate
+  const [formData, setFormData] = useState({ name: "", email: "" });
 
-  const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-  });
+  // Load user data once on mount
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("fetscr_user"));
+    if (storedUser) {
+      setUser(storedUser);
+      setFormData({
+        name: storedUser.name || "",
+        email: storedUser.email || "",
+      });
+    }
+  }, []);
 
   if (!user) {
     return (
       <div className="profile-container">
         <h2>User not found</h2>
         <p>Please login again.</p>
+        <button onClick={() => navigate("/login")} className="btn-primary">
+          Go to Login
+        </button>
       </div>
     );
   }

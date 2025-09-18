@@ -1,8 +1,10 @@
+// src/components/MorePlans.js
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./MorePlans.css";
 
-const SERVER = "http://localhost:5000";
+// Use environment variable instead of hardcoded localhost
+const SERVER = process.env.REACT_APP_API_URL;
 
 const MorePlans = () => {
   const navigate = useNavigate();
@@ -15,17 +17,25 @@ const MorePlans = () => {
         navigate("/login");
         return;
       }
+
       const res = await fetch(`${SERVER}/setPlan`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(planPayload),
       });
+
       const data = await res.json();
       if (!res.ok || !data.success) {
         alert("❌ Failed to set plan: " + (data.error || "Unknown error"));
         return;
       }
-      alert(`✅ Plan activated: ${data.plan} (${data.allowed_queries} queries × ${data.results_per_query} results)`);
+
+      alert(
+        `✅ Plan activated: ${data.plan.toUpperCase()} (${data.allowed_queries} queries × ${data.results_per_query} results)`
+      );
       navigate("/home");
     } catch (err) {
       console.error("choose plan error:", err);
@@ -43,7 +53,9 @@ const MorePlans = () => {
           <h2>Sub2</h2>
           <p>30 Queries · 50 Results/query</p>
           <p className="price">$52.94</p>
-          <button onClick={() => choose({ plan: "sub2" })}>Subscribe Sub2</button>
+          <button onClick={() => choose({ plan: "sub2" })}>
+            Subscribe Sub2
+          </button>
         </div>
 
         {/* Sub3 */}
@@ -51,7 +63,9 @@ const MorePlans = () => {
           <h2>Sub3</h2>
           <p>30 Queries · 25 Results/query</p>
           <p className="price">$26.47</p>
-          <button onClick={() => choose({ plan: "sub3" })}>Subscribe Sub3</button>
+          <button onClick={() => choose({ plan: "sub3" })}>
+            Subscribe Sub3
+          </button>
         </div>
 
         {/* Sub4 */}
@@ -59,7 +73,9 @@ const MorePlans = () => {
           <h2>Sub4</h2>
           <p>20 Queries · 50 Results/query</p>
           <p className="price">$35.29</p>
-          <button onClick={() => choose({ plan:  "sub4" })}>Subscribe Sub4</button>
+          <button onClick={() => choose({ plan: "sub4" })}>
+            Subscribe Sub4
+          </button>
         </div>
       </div>
 
