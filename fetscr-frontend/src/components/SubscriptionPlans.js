@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./plans.css";
 
-// ✅ Use environment variable
-const API_URL = process.env.REACT_APP_API_URL;
+// ✅ Use environment variable with fallback
+const API_URL = process.env.REACT_APP_API_URL || "https://my-project-1-ou0t.onrender.com";
 
 const SubscriptionPlans = () => {
   const [customQueries, setCustomQueries] = useState(1);
@@ -18,7 +18,7 @@ const SubscriptionPlans = () => {
     setCustomPrice(`$${priceUSD}`);
   }, [customQueries, customResults]);
 
-  // helper to call backend setPlan
+  // ✅ Helper to call backend setPlan safely
   async function callSetPlan(payload) {
     try {
       const token = localStorage.getItem("fetscr_token");
@@ -36,15 +36,23 @@ const SubscriptionPlans = () => {
         },
         body: JSON.stringify(payload),
       });
+
+      // ✅ Ensure response is JSON
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        const text = await res.text();
+        throw new Error(`Server did not return JSON. Response: ${text}`);
+      }
+
       const data = await res.json();
       if (!res.ok || !data.success) {
-        alert("❌ Failed to set plan: " + (data.error || "Unknown error"));
-        return null;
+        throw new Error(data.error || "Unknown error");
       }
+
       return data;
     } catch (err) {
-      console.error("setPlan error:", err);
-      alert("❌ Failed to set plan: " + (err.message || "Unknown error"));
+      console.error("❌ setPlan error:", err);
+      alert("❌ Failed to set plan: " + err.message);
       return null;
     }
   }
@@ -99,7 +107,7 @@ const SubscriptionPlans = () => {
             min="1"
             max="10000"
             value={customQueries}
-            onChange={(e) => setCustomQueries(parseInt(e.target.value) || 0)}
+            onChange={(e) => setCustomQueries(Number(e.target.value) || 0)}
           />
           <label>Results per Query (max 100)</label>
           <input
@@ -107,7 +115,7 @@ const SubscriptionPlans = () => {
             min="1"
             max="100"
             value={customResults}
-            onChange={(e) => setCustomResults(parseInt(e.target.value) || 0)}
+            onChange={(e) => setCustomResults(Number(e.target.value) || 0)}
           />
           <p>
             <small>💡 Price = $0.04 per data (result)</small>
