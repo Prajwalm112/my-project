@@ -28,14 +28,12 @@ const SubscriptionPlans = () => {
         return null;
       }
 
-      const res = await fetch(`${API_URL}/setPlan`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch("https://my-project-1-ou0t.onrender.com/setPlan", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  // eslint-disable-next-line no-undef
+  body: JSON.stringify({ plan }),
+})
 
       // ✅ Ensure response is JSON
       const contentType = res.headers.get("content-type");

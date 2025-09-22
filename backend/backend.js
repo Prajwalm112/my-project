@@ -39,9 +39,36 @@ let db;
 })();
 
 // Root route
-app.get("/", (req, res) => {
-  res.json({ success: true, message: "FETSCR backend is running" });
+// ----------------- Set Plan -----------------
+app.post("/setPlan", authenticate, async (req, res) => {
+  try {
+    if (!db) return res.status(500).json({ success: false, error: "DB not ready" });
+
+    const { plan_type, allowed_queries, results_per_query } = req.body;
+    if (!plan_type || !allowed_queries || !results_per_query) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Missing plan fields" });
+    }
+
+    await db.run(
+      `UPDATE users 
+         SET plan_type = ?, allowed_queries = ?, results_per_query = ?
+       WHERE id = ?`,
+      [plan_type, allowed_queries, results_per_query, req.user.id]
+    );
+
+    res.json({
+      success: true,
+      message: "Plan updated successfully",
+      plan: { plan_type, allowed_queries, results_per_query },
+    });
+  } catch (err) {
+    console.error("setPlan error:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
+
 
 // ----------------- User Signup -----------------
 app.post("/signup", async (req, res) => {
